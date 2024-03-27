@@ -4,14 +4,15 @@ import torch as tc
 
 class finite_difference:
     
-    def __init__(self, r, q, sigma, K, T, delta_K, delta_T):
+    def __init__(self, r, q, sigma, K, T, delta_S, delta_T, eu_am = "European"):
         self.r = r
         self.q = q
         self.sigma = sigma
         self.K = K
         self.T = T
-        self.delta_K = delta_K
+        self.delta_S = delta_S
         self.delta_T = delta_T
+        self.eu_am = eu_am
         
         return
     
@@ -32,7 +33,7 @@ class finite_difference:
     
     def create_grid(self, S_range = tc.tensor([0, 100])):
         self.Ts = tc.arange(0, self.T + self.delta_T, self.delta_T)
-        self.Ss = tc.arange(S_range[0], S_range[1] + self.delta_K, self.delta_K)
+        self.Ss = tc.arange(S_range[0], S_range[1] + self.delta_S, self.delta_S)
         
         a = [self.a_star(j) for j in range(len(self.Ss))]
         b = [self.b_star(j) for j in range(len(self.Ss))]
@@ -47,15 +48,21 @@ class finite_difference:
         f[:, 0] = self.K
         f[:, -1] = 0
         
-        
         for i in reversed(range(N - 1)):
             for j in range(1, M - 1):
-                f[i, j] = a[j] * f[i+1, j-1] + b[j] * f[i+1, j] + c[j] * f[i+1, j+1]
-        
+                
+                option_price = a[j] * f[i+1, j-1] + b[j] * f[i+1, j] + c[j] * f[i+1, j+1]
+                
+                if self.eu_am == "American":
+                    f[i, j] = max(option_price, self.K - j * self.delta_S)
+                
+                else:
+                    f[i, j] = option_price
+                    
         return f
         
         
 if __name__ == "__main__":
     
-    fd = finite_difference(0.1, 0, 0.2, 50, 0.4167, 5, 0.0417)
-    fd.create_grid()
+    fd = finite_difference(0.1, 0, 0.2, 50, 0.4167, 5, 0.04167, eu_am = "American")
+    print(fd.create_grid())

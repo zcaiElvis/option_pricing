@@ -1,7 +1,7 @@
 from src.util import *
 
 
-def calculate_bsm_option_price(params, option_type = "call", dividend = None, q = 0):
+def calculate_bsm_option_price(params, option_type = "call", dividend = None):
     '''
     `params` is in the order of [sigma, S0, K, r, T]
     '''
