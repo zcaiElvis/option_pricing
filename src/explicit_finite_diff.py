@@ -2,7 +2,7 @@ import torch as tc
 
 
 
-class finite_difference:
+class exp_finite_difference:
     
     def __init__(self, r, q, sigma, K, T, delta_S, delta_T, eu_am = "European"):
         self.r = r
@@ -64,5 +64,5 @@ class finite_difference:
         
 if __name__ == "__main__":
     
-    fd = finite_difference(0.1, 0, 0.2, 50, 0.4167, 5, 0.04167, eu_am = "American")
+    fd = exp_finite_difference(0.1, 0, 0.2, 50, 0.4167, 5, 0.04167, eu_am = "American")
     print(fd.create_grid())

@@ -31,3 +31,12 @@ def vega_euro(params):
     sigma, S0, K, r, T = params
     return S0*tc.sqrt(T)*N_prime(cal_d1(params))
 
+def rho_euro_call(params):
+    sigma, S0, K, r, T = params
+    d2 = cal_d2(params)
+    return K*T*tc.exp(-r*T)*N(d2)
+
+def rho_euro_put(params):
+    sigma, S0, K, r, T = params
+    d2 = cal_d2(params)
+    return -K*T*tc.exp(-r*T)*N(-d2)

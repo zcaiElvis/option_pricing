@@ -33,6 +33,8 @@ class Monte_Carlo:
             plt.plot(S)
         plt.axhline(y = K, linestyle = "dashed")
         plt.title("Simulation")
+        plt.xlabel("Time")
+        plt.ylabel("Asset Price")
         
         Payoffs = [self.calculate_payoff(S, K, option_type, call_or_put) for S in S_simulations]
         
